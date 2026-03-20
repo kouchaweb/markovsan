@@ -1,0 +1,58 @@
+{
+  "name": "Markov Chain Text Generator",
+  "dockerFile": "Dockerfile",
+  "context": "..",
+
+  // VS Code extensions to install in the container
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff",
+        "ms-python.flake8",
+        "ms-toolsai.jupyter",
+        "ms-vscode.makefile-tools",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "python.linting.flake8Args": ["--max-line-length=100"],
+        "python.formatting.provider": "black",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.black-formatter",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "ruff.lineLength": 100,
+        "editor.rulers": [100],
+        "editor.trimAutoWhitespace": true,
+        "files.trimTrailingWhitespace": true
+      }
+    }
+  },
+
+  // Forward ports if needed in the future
+  "forwardPorts": [],
+
+  // Run commands after the container is created
+  "postCreateCommand": "python --version && uv --version && ruff --version && black --version && flake8 --version",
+
+  // Mounts (optional - workspace is already mounted by default)
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/devuser/.ssh,type=bind,consistency=cached"
+  ],
+
+  // Remote user settings
+  "remoteUser": "devuser",
+
+  // Environment variables for the container
+  "remoteEnv": {
+    "PATH": "/home/devuser/.local/bin:${PATH}"
+  }
+}
